@@ -25,9 +25,10 @@ export function flag(player, check, id, catergory, debug, lagback) {
     if(!debug) return console.warn("[Anticheat] Debug message not found in flag from check: " + check);
     if(!lagback) return console.warn("[Anticheat] Lagback not found in flag from check: " + check);
 
-    for (const player of world.getPlayers()) {
-        if(player.hasTag("anticheat_notify")) {
-            player.sendMessage("[Anticheat] " + player.name + " has failed " + check + " (" + id + ") in " + catergory + " - " + debug + (lagback ? " (lagback)" : ""));
+
+    for (const player_admin of world.getPlayers()) {
+        if(player_admin.hasTag("anticheat_notify")) {
+            player_admin.sendMessage("[Anticheat] " + player.name + " has failed " + check + " (" + id + ") [" + catergory + "] -> " + debug + (lagback ? " (lagback)" : "") + ". [x" + "" + "]");
         }
     }
     const playerVelocity = player.getVelocity()
