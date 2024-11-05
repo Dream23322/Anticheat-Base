@@ -1,8 +1,10 @@
 import * as Minecraft from "@minecraft/server";
-import config from "../../data/config";
+import config from "../../../data/config";
 
 const world = Minecraft.world;
 const system = Minecraft.system;
+
+// This links into punishmentHandler    
 
 /**
  * @name flag
