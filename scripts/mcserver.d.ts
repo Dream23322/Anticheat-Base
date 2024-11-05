@@ -5,6 +5,7 @@ declare module "@minecraft/server" {
 		Player,
 		// Numbers
 		cps: number,
+		lastSafePos: Vector3,
 
 		// Arrays
 		entitiesHit: array
