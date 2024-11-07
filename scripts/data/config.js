@@ -5,7 +5,8 @@ export default
         "debug": true,
         "autoKick": true,
         "autoBan": true,
-        "silent": false
+        "silent": false,
+        "maxLogs": 200
     },
     "modules": {
         "movement": {
