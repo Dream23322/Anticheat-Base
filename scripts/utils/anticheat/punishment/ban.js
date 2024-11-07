@@ -1,3 +1,10 @@
+
+/**
+ * @name checkBan
+ * @description Checks if a player is banned and if so, handles the ban.
+ * @param {object} player - The player to check.
+ * @returns {void}
+ */
 export function checkBan(player) {
 
     if(player.hasTag("anticheat_isbanned")) {
