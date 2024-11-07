@@ -1,9 +1,8 @@
 import * as Minecraft from "@minecraft/server";
 
-// Import Movement Checks
-import { speed_a } from "./checks/movement/speedA";
 import { handleCombatClick } from "./managers/anticheat/check/combat/clickData";
 import { handleData } from "./managers/player/tagData";
+import { runTickChecks } from "./managers/anticheat/check/checkRunner";
 
 const world = Minecraft.world;
 const system = Minecraft.system;
@@ -12,7 +11,7 @@ Minecraft.system.runInterval(() => {
     for (const player of world.getPlayers()) {
         handleData(player);
         // Run checks
-        speed_a(player);
+        runTickChecks(player);
     }
 });
 
