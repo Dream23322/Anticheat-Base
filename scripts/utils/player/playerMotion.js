@@ -18,3 +18,24 @@ export function getSpeed(player) {
     const playerSpeed = Number(fastSqrt(fastAbs(playerVelocity.x**2 +playerVelocity.z**2)).toFixed(2));
     return playerSpeed;
 }
+
+/**
+ * @name isMoving
+ * @remarks Checks if the player is moving
+ * @param {object} player - player object (The target)
+ * @returns boolean value of if the player is moving
+ */
+export function isMoving(player) {
+    const speed = getSpeed(player);
+    const hasMotion = (
+        player.getVelocity().x !== 0 ||
+        player.getVelocity().y !== 0 ||
+        player.getVelocity().z !== 0
+    )
+    const posDiff = (
+        player.lastPosition.x !== player.location.x ||
+        player.lastPosition.y !== player.location.y ||
+        player.lastPosition.z !== player.location.z
+    )
+    return hasMotion || speed > 0 || posDiff
+}
