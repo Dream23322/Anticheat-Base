@@ -1,4 +1,5 @@
 import * as Minecraft from "@minecraft/server";
+import { isMoving } from "../../utils/player/playerMotion";
 
 /**
  * @name handleData
@@ -21,15 +22,10 @@ export function handleData(player) {
     */
 
     // Handing isMoving
-    if(
-        player.hasTag("anticheat_ismoving") &&
-        (
-            player.getVelocity().x > 0 || 
-            player.getVelocity().z > 0 || 
-            player.getVelocity().y > 0
-        )
-    ) {
+    if(isMoving(player)) {
+
         player.addTag("anticheat_ismoving");
+        
     } else player.removeTag("anticheat_ismoving");
 
     // Handle ground
