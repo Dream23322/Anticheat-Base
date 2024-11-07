@@ -1,13 +1,15 @@
-import { Player, Entity, EntityComponent, Container, ItemComponent, EnchantmentList } from "@minecraft/server";
+//import { Player, Entity, EntityComponent, Container, ItemComponent, EnchantmentList } from "@minecraft/server";
 
 declare module "@minecraft/server" {
 	interface Player {
 		Player,
 		// Numbers
 		cps: number,
+		//@ts-ignore
 		lastSafePos: Vector3,
 
 		// Arrays
+		// @ts-ignore
 		entitiesHit: array
 	}
 
@@ -20,6 +22,7 @@ declare module "@minecraft/server" {
 		cps: number,
 
 		// Arrays
+		// @ts-ignore
 		entitiesHit: array
 	}
 }
