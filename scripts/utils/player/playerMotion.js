@@ -39,3 +39,23 @@ export function isMoving(player) {
     )
     return hasMotion || speed > 0 || posDiff
 }
+
+/**
+ * 
+ * @param {object} player 
+ * @returns All keys pressed by the player as a list
+ */
+export function getPressedKeys(player) {
+    const keys = [];
+    if (player.isSneaking) keys.push("sneak");
+    if (player.isSprinting) keys.push("sprint");
+    if (player.isJumping) keys.push("jump");
+
+    const inputData = player.inputInfo.getMovementVector();
+
+    if (inputData.y > 0) keys.push("W");
+    if (inputData.y < 0) keys.push("S");
+    if (inputData.x > 0) keys.push("D");
+    if (inputData.x < 0) keys.push("A");
+    return keys;
+}
