@@ -1,139 +1,60 @@
-
 // Fast absolute value
-/**
- * @name fastAbs
- * @remarks Returns the absolute value of a number (Faster than Math.abs)
- * @param {*} x - Input Value (positive or negative)
- * @returns Absolute value of a number
- * @throws Error if x is NaN
- */
-export function fastAbs(x) {
+export function abs(x) {
     return x < 0 ? -x : x;
 }
 
 // Fast floor function
-/**
- * @name fastFloor
- * @remarks Returns the integer part of a number (Faster than Math.floor)
- * @param {*} x - Input Value (positive or negative)
- * @returns Integer part of a number
- * @throws Error if x is NaN
- */
-export function fastFloor(x) {
+export function floor(x) {
     return x | 0;
 }
 
 // Fast ceiling function
-/**
- * @name fastCeil
- * @remarks Returns the smallest integer greater than or equal to a given number (Faster than Math.ceil)
- * @param {*} x - Input Value (positive or negative)
- * @returns The smallest integer greater than or equal to a given number
- * @throws Error if x is NaN
- */
-export function fastCeil(x) {
+export function ceil(x) {
     return (x + 0.99999) | 0;
 }
 
 // Fast round function
-/**
- * @name fastRound
- * @remarks Returns the nearest integer to a given number (Faster than Math.round)
- * @param {*} x - Input Value (positive or negative)
- * @returns The nearest integer to a given number
- * @throws Error if x is NaN
- */
-export function fastRound(x) {
+export function round(x) {
     return (x + 0.5) | 0;
 }
 
 // Fast square root (less accurate but faster)
-/**
- * @name fastSqrt
- * @remarks Returns the square root of a number (Faster than Math.sqrt, but it can be less accurate, also can cause massive differences in some checks, this was an issue in Isolate-Anticheats reach[b] check where it would say legit reach was 80 blocks)
- * @param {*} x - Input Value (positive or negative)
- * @returns The square root of a number
- * @throws Error if x is NaN or negative
- */
-export function fastSqrt(x) {
-    if (isNaN(x) || x < 0) {
-        return NaN;
-    }
-
-    let t;
-    let squareRoot = x / 2;
-
-    if (x !== 0) {
-        do {
-            t = squareRoot;
-            squareRoot = (t + (x / t)) / 2;
-        } while (t !== squareRoot);
-    }
-
-    return squareRoot;
+export function sqrt(x) {
+    return x * 0.5 + (x / (x * 0.5));
 }
 
 // Fast inverse square root (Quake III Arena method)
-/**
- * @name fastInvSqrt
- * @remarks Returns the inverse square root of a number (Faster than Math.sqrt)
- * @param {*} x - Input Value (positive or negative)
- * @returns The inverse square root of a number
- * @throws Error if x is NaN or negative
- */
 export function fastInvSqrt(x) {
-    const halfx = 0.5 * x;
-    let y = x;
-    let i = new Float32Array(1);
-    i[0] = x;
-    i = 0x5f3759df - (i[0] >> 1);
-    y = new Float32Array([i])[0];
-    y = y * (1.5 - halfx * y * y);
-    return y;
+    const xhalf = 0.5 * x;
+    const i = 0x5f3759df - (x >> 1);
+    const y = new Float32Array([i])[0];
+    return y * (1.5 - xhalf * y * y);
 }
 
 // Fast distance between two 3D points
-/**
- * @name fastDistance3D
- * @remarks Returns the distance between two 3D points
- * @param {*} x1 - X coordinate of the first point
- * @param {*} y1 - Y coordinate of the first point
- * @param {*} z1 - Z coordinate of the first point
- * @param {*} x2 - X coordinate of the second point
- * @param {*} y2 - Y coordinate of the second point
- * @param {*} z2 - Z coordinate of the second point
- * @returns The distance between two 3D points
- * @throws Error if x1, y1, z1, x2, y2, or z2 is NaN
- */
 export function fastDistance3D(x1, y1, z1, x2, y2, z2) {
     const dx = x2 - x1;
     const dy = y2 - y1;
     const dz = z2 - z1;
-    return fastSqrt(dx * dx + dy * dy + dz * dz);
+    return sqrt(dx * dx + dy * dy + dz * dz);
 }
 
-// Fast check if a number is within a range` 
-/**
- * @name fastInRange
- * @remarks Checks if a number is within a range
- * @param {*} x - Input Value
- * @param {*} min - Minimum value
- * @param {*} max - Maximum value
- * @returns True if the number is within the range
- * @throws Error if min or max is NaN
- * @throws Error if x is NaN
- */
+export function square(x) {
+    return x * x;
+}
+
+// Fast check if a number is within a range
 export function fastInRange(x, min, max) {
     return (x - min) * (x - max) <= 0;
 }
 
 // Fast linear interpolation
-export function fastLerp(start, end, t) {
+export function lerp(start, end, t) {
     return start + t * (end - start);
 }
 
 // Fast clamp function
-export function fastClamp(x, min, max) {
+export function clamp(x, min, max) {
     return x < min ? min : (x > max ? max : x);
 }
 
@@ -141,106 +62,168 @@ export function countTrue(arr) {
     return arr.filter(Boolean).length;
 }
 
-export function fastHypot(x, y) {
-    x = fastAbs(x);
-    y = fastAbs(y);
-    const max = Math.max(x, y);
-    const min = Math.min(x, y);
-    if (max === 0) return 0;
-    const ratio = min / max;
-    return max * fastSqrt(1 + ratio * ratio);
-}
-
-export function fastExp(x) {
-    const n = 20; // Number of terms in the Taylor series expansion
-    let result = 1;
-    let term = 1;
-    
-    for (let i = 1; i < n; i++) {
-        term *= x / i;
-        result += term;
+export function hypot(x, y) {
+    try {
+        return pythag(x, y);
+    } catch (e) {
+        console.warn("[FastHypot] Error: " + e);
+        return Math.hypot(x, y);
     }
-    
-    return result;
 }
 
-export function fastPow(base, exponent) {
-    if (exponent === 0) return 1;
-    if (base === 0) return 0;
-    
-    let result = 1;
-    let currentBase = base;
-    
-    const integerPart = fastFloor(exponent);
-    const fractionalPart = exponent - integerPart;
-    
-    // Handle integer part using exponentiation by squaring
-    let n = fastAbs(integerPart);
-    while (n > 0) {
-        if (n & 1) {
-            result *= currentBase;
+export function exp(x) {
+    try {
+        const n = 20; // Number of terms in the Taylor series expansion
+        let result = 1;
+        let term = 1;
+        
+        for (let i = 1; i < n; i++) {
+            term *= x / i;
+            result += term;
         }
-        currentBase *= currentBase;
-        n >>= 1;
+        
+        return result;
+    } catch (e) {
+        console.warn("[FastExp] Error: " + e);
+        return Math.exp(x);
     }
-    
-    // Adjust result for negative integer exponents
-    if (integerPart < 0) {
-        result = 1 / result;
-    }
-    
-    // Handle fractional part using Math.exp and Math.log
-    if (fractionalPart !== 0) {
-        result *= fastExp(fractionalPart * fastLog(base));
-    }
-    
-    return result;
-}
-export function fastLog(x) {
-    if (x <= 0) {
-        throw new Error("Input must be positive");
-    }
-    
-    const n = 20; // Number of terms in the series expansion
-    let result = 0;
-    let term = (x - 1) / (x + 1);
-    let termSquared = term * term;
-    
-    for (let i = 1; i <= n; i += 2) {
-        result += term / i;
-        term *= termSquared;
-    }
-    
-    return 2 * result;
 }
 
-export function fastAtan2(y, x) {
-    const absY = fastAbs(y) + 1e-10; // Prevent division by zero
-    const angle = fastAtan(y / x);
-    let result;
+export function pow(base, exponent) {
+    try {
+        // Handle special cases
+        if (exponent === 0) return 1;
+        if (exponent === 1) return base;
+        if (base === 0) return 0;
+        if (base === 1) return 1;
+        
+        // For other cases, use exp and log
+        // This is faster than Math.pow for our precision needs
+        return exp(exponent * Math.log(abs(base))) * 
+            (base < 0 && exponent % 2 ? -1 : 1);
 
-    if (x >= 0) {
-        result = angle;
-    } else {
-        result = y >= 0 ? angle + Math.PI : angle - Math.PI;
+    } catch (e) {
+        console.warn("[FastPow] Error: " + e);
+        return Math.pow(base, exponent);
     }
-    
-    return result;
 }
-export function fastAtan(x) {
-    const a1 = 0.99997726;
-    const a3 = -0.33262347;
-    const a5 = 0.19354346;
-    const a7 = -0.11643287;
-    const a9 = 0.05265332;
-    const a11 = -0.01172120;
-
-    const x2 = x * x;
-    const x4 = x2 * x2;
-    const x6 = x4 * x2;
-    const x8 = x6 * x2;
-    const x10 = x8 * x2;
-
-    return x * (a1 + a3 * x2 + a5 * x4 + a7 * x6 + a9 * x8 + a11 * x10);
+export function log(x) {
+    try {
+        if (x <= 0) {
+            throw new Error("Input must be positive");
+        }
+        
+        const n = 20; // Number of terms in the series expansion
+        let result = 0;
+        let term = (x - 1) / (x + 1);
+        let termSquared = term * term;
+        
+        for (let i = 1; i <= n; i += 2) {
+            result += term / i;
+            term *= termSquared;
+        }
+        
+        return 2 * result;
+    } catch (e) {
+        console.warn("[FastLog] Error: " + e);
+        return Math.log(x);
+    }
 }
-export const PI = 105414357.0 / 33554432.0 + 1.984187159361080883e-9;
+
+export function atan2(y, x) {
+    try {
+        // Handle special cases
+        if (x === 0) {
+            if (y > 0) return PI / 2;
+            if (y < 0) return -PI / 2;
+            return 0;
+        }
+
+        const abs_y = abs(y);
+        const abs_x = abs(x);
+        const a = Math.min(abs_x, abs_y) / Math.max(abs_x, abs_y);
+        
+        // Approximation using polynomial
+        const s = a * a;
+        let r = ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a;
+        
+        // Adjust for quadrant
+        if (abs_y > abs_x) r = 1.57079637 - r;
+        if (x < 0) r = PI - r;
+        if (y < 0) r = -r;
+        
+        return r;
+    } catch (e) {
+        console.warn("[FastAtan2] Error: " + e);
+        return Math.atan2(y, x);
+    }
+}
+export function atan(x) {
+    try {
+        const abs_x = abs(x);
+        const a = Math.min(abs_x, 1) / Math.max(abs_x, 1);
+        
+        // Approximation using polynomial
+        const s = a * a;
+        let r = ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a;
+        
+        // Adjust if |x| > 1
+        if (abs_x > 1) r = PI/2 - r;
+        if (x < 0) r = -r;
+        
+        return r;
+    } catch (e) {
+        console.warn("[FastAtan] Error: " + e);
+        return Math.atan(x);
+    }
+}
+
+export function sin(x) {
+    try {
+        // Normalize angle to -π to π
+        x = x % (2 * PI);
+        if (x > PI) x -= 2 * PI;
+        else if (x < -PI) x += 2 * PI;
+
+        // Approximation: x - (x^3)/6 + (x^5)/120
+        const x2 = x * x;
+        return x * (1 - x2 / 6 + x2 * x2 / 120);
+    } catch (e) {
+        console.warn("[FastSin] Error: " + e);
+        return Math.sin(x);
+    }
+}
+
+export function cos(x) {
+    try {
+        // cos(x) = sin(x + π/2)
+        return sin(x + Math.PI / 2);
+    } catch (e) {
+        console.warn("[FastCos] Error: " + e);
+        return Math.cos(x);
+    }
+}
+
+export function tan(x) {
+    try {
+        const sinX = sin(x);
+        const cosX = cos(x);
+        
+        // Avoid division by zero
+        if (cosX === 0) return Infinity;
+        return sinX / cosX;
+    } catch (e) {
+        console.warn("[FastTan] Error: " + e);
+        return Math.tan(x);
+    }
+}
+
+export function pythag(a, b) {
+    return sqrt(a ** 2 + b ** 2);
+}
+
+export function pytahg3d(a, b, c) {
+    return sqrt(a ** 2 + b ** 2 + c ** 2);
+}
+
+export const PI = 3.14159;
