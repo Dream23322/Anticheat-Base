@@ -1,0 +1,41 @@
+{
+	"format_version": 2,	
+	"header": {
+		"name": "Anticheat Base - 4urxra",
+		"description": "A minecraft bedrock realm anticheat",
+		"uuid": "f6f7ef91-ba91-47c7-9a6c-b08695e3bcee", 
+		"version": [0, 0, 1],
+		"min_engine_version": [1, 19, 0]
+	},
+	"metadata": {
+		"authors": ["4urxra"],
+		"url": "https://github.com/Dream23322/Anticheat-Base"
+	},
+	"modules": [{
+			"type": "data",
+			"uuid": "fdad6e6d-4c1e-4e08-adfa-83a99d99d3fc",
+			"version": [
+				1,
+				0,
+				0
+			]
+		},
+		{
+			"description": "Anticheat Base Beta API Features",
+			"language": "javascript",
+			"type": "script",
+			"uuid": "156e10af-b260-41c2-8b03-e616cb4c0df0",
+			"version": [0, 0, 1],
+			"entry": "scripts/start.js"
+		}
+	],
+	"dependencies": [{
+		"module_name": "@minecraft/server",
+		"version": "2.1.0-beta"
+	},
+	{
+		"module_name": "@minecraft/server-ui",
+		"version": "2.1.0-beta"
+	}
+]
+}
